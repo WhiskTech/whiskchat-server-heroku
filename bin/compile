@@ -34,7 +34,7 @@ function mktmpdir() {
 function indent() {
     c='s/^/       /'
     case $(uname) in
-	Darwin) sed -l "$c";;
+        Darwin) sed -l "$c";;
 	*)      sed -u "$c";;
     esac
 }
@@ -119,14 +119,14 @@ declare -A engine_requests
 
 engine_defaults["node"]="0.10.x"
 engine_defaults["npm"]="1.3.x"
-
+GITVER=`git describe --always HEAD`
 engine_versions["node"]=$(manifest_versions "nodejs")
 engine_requests["node"]=$(package_engine_version "node")
 
 engine_versions["npm"]=$(manifest_versions "npm")
 engine_requests["npm"]=$(package_engine_version "npm")
-echo "-----> Updating WhiskChat Server"
-echo `git describe --always HEAD` | indent
+echo "-----> Updating WhiskChat Server $GITVER"
+sed -i 's/INSERTVERSION/$GITVER/g' $1/server.js
 echo "-----> Resolving engine versions"
 
 # add a warning if no version of node specified
